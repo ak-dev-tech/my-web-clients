@@ -1,0 +1,207 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Dedicated Dark Mode Foundations & Editorial Palette */
+  --color-dark-bg: #0B0F12;
+  --color-dark-card: #162227;
+  --color-dark-surface: #142326;
+  --color-dark-card-border: rgba(255, 255, 255, 0.08);
+
+  /* Signature Accent & Action Tokens */
+  --color-flash-orange: #FF5A1F;
+  --color-flash-amber: #F59E0B;
+  --color-flash-lime: #C7F432;
+  --color-eco-emerald: #10B981;
+}
+
+html {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+html.dark {
+  background-color: #0B0F12;
+  color: #F3F4F6;
+  color-scheme: dark;
+}
+
+/* Refined Brand & Flash Drops Editorial Palette */
+:root {
+  --color-eco-emerald: #10B981;
+  --color-flash-orange: #FF5A1F;
+  --color-flash-amber: #F59E0B;
+  --color-flash-lime: #C7F432;
+  --color-charcoal: #142326;
+  --color-dark-base: #0B0F12;
+  --color-dark-surface: #142326;
+  --color-dark-card: #162227;
+  --color-dark-border: rgba(255, 255, 255, 0.08);
+}
+
+/* Ensure strong accessibility contrast for primary and secondary text in dark mode */
+.dark body {
+  background-color: #0B0F12;
+  color: #F3F4F6;
+}
+
+.dark p, .dark span, .dark li {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Rendering performance & paint containment for offscreen feed sections */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 650px;
+}
+
+.content-visibility-feed {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 850px;
+}
+
+/* Subtle, smooth card fade-in and slide-up transition animation */
+@keyframes subtleSlideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-card-populate {
+  animation: subtleSlideUpFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Subtle heartbeat pulse animation for countdown timer */
+@keyframes subtleHeartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.02);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.025);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+.animate-heartbeat {
+  animation: subtleHeartbeat 3.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Stock remaining progress bar pulse glow */
+@keyframes progressPulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(255, 68, 56, 0.4), 0 0 12px rgba(255, 68, 56, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(255, 68, 56, 0.75), 0 0 20px rgba(255, 68, 56, 0.35);
+  }
+}
+
+.animate-stock-glow {
+  animation: progressPulseGlow 2.5s ease-in-out infinite;
+}
+
+/* Atmospheric ambient gradient background for dark mode */
+.ambient-dark-backdrop {
+  background-image: radial-gradient(ellipse at top right, rgba(245, 158, 11, 0.08), transparent 50%),
+                    radial-gradient(ellipse at bottom left, rgba(16, 185, 129, 0.06), transparent 50%),
+                    radial-gradient(circle at 50% 20%, rgba(255, 90, 31, 0.04), transparent 60%);
+}
+
+/* ========================================================================= */
+/* Low-End Mobile & Budget Smartphone Optimizations (Rendering & Paint CPU)  */
+/* ========================================================================= */
+@media (max-width: 768px) {
+  /* Eliminate costly GPU-heavy filters and redraws on mobile */
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl,
+  .backdrop-blur-sm,
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Disable continuous keyframe loops, marquees, and pulsing on mobile viewports */
+  .animate-heartbeat,
+  .animate-stock-glow,
+  .animate-pulse,
+  .animate-ping,
+  [class*="animate-pulse"],
+  [class*="animate-ping"],
+  [class*="animate-stock-glow"],
+  [class*="animate-heartbeat"] {
+    animation: none !important;
+  }
+
+  /* Simplify ambient layered box-shadows on mobile cards; rely on crisp 1px borders */
+  .shadow-xl, 
+  .shadow-2xl, 
+  .shadow-lg {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  }
+
+  /* Enable hardware accelerated rasterization */
+  img {
+    content-visibility: auto;
+  }
+}
+
+/* Reduced motion preference honoring */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-card-populate,
+  .animate-heartbeat,
+  .animate-stock-glow,
+  .animate-pulse,
+  .animate-ping,
+  .animate-spin,
+  [class*="animate-"] {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* Font display swap fallback & touch target utility */
+@supports (font-display: swap) {
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Outfit';
+    font-display: swap;
+  }
+}
